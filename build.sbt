@@ -6,7 +6,7 @@ scalaVersion := "2.11.7"
 
 // Change this to another test framework if you prefer
 libraryDependencies ++= Seq(
-  "org.scaldi" %% "scaldi-akka" % "0.3.1",
+  "org.scaldi" %% "scaldi-akka" % "0.5.7",
   "org.scalatest" %% "scalatest" % "2.2.4" % "test"
 )
 
