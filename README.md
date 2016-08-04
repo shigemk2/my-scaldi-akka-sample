@@ -1,0 +1,1 @@
+# my-scaldi-akka-sample
