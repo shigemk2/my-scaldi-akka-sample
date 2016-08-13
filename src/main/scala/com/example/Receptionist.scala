@@ -1,6 +1,7 @@
 package com.example
 
 import scaldi.Injector
+import akka.actor.{ActorRef, Actor}
 import scaldi.akka.AkkaInjectable
 
 class Receptionist (implicit inj: Injector) extends Actor with AkkaInjectable {

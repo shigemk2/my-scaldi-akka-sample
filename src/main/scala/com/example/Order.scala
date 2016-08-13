@@ -1,10 +1,9 @@
 package com.example
 
-import java.math.RoundingMode
-import java.util.UUID
-
 import scaldi.Injector
+import akka.actor.{Actor, ActorRef, PoisonPill}
 import scaldi.akka.AkkaInjectable
+import scala.math.BigDecimal.RoundingMode
 
 class OrderProcessor(implicit inj: Injector) extends Actor with AkkaInjectable {
   import Messages._
@@ -19,12 +18,12 @@ class OrderProcessor(implicit inj: Injector) extends Actor with AkkaInjectable {
 
       priceCalculator ! CalculatePrice(netAmount)
 
-      context beccome workingHard(orderInfo, sender)
+      context become workingHard(orderInfo, sender)
   }
 
   def workingHard(orderInfo: ProcessOrder, reportTo: ActorRef): Receive = {
     case CancelProcessing =>
-      reportTo ! OrderProcesingFailed(UUID.randomUUID().toString, grossPrice)
+      reportTo ! OrderProcessingFailed("Canceled..")
       self ! PoisonPill
   }
 }
@@ -35,6 +34,6 @@ class PriceCalculator extends Actor {
   def receive = {
     case CalculatePrice(netAmount) =>
       val grossCent = (netAmount * BigDecimal("1.19")).setScale(0, RoundingMode.HALF_UP).toIntExact
-      sendor ! GrossPriceCalculated(netAmount, grossCent)
+      sender ! GrossPriceCalculated(netAmount, grossCent)
   }
 }
