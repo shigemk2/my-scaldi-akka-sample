@@ -1,5 +1,7 @@
 package com.example
 
+import scaldi.Injectable
+
 trait UserService {
   def getUserByUserName(userName: String): Option[User]
 }
