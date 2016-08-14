@@ -1,8 +1,11 @@
 package com.example
 
+import java.util.UUID
+
 import scaldi.Injector
 import akka.actor.{Actor, ActorRef, PoisonPill}
 import scaldi.akka.AkkaInjectable
+
 import scala.math.BigDecimal.RoundingMode
 
 class OrderProcessor(implicit inj: Injector) extends Actor with AkkaInjectable {
@@ -24,6 +27,11 @@ class OrderProcessor(implicit inj: Injector) extends Actor with AkkaInjectable {
   def workingHard(orderInfo: ProcessOrder, reportTo: ActorRef): Receive = {
     case CancelProcessing =>
       reportTo ! OrderProcessingFailed("Canceled..")
+      self ! PoisonPill
+    case GrossPriceCalculated(_, grossPrice) =>
+      println("Processing order.....")
+
+      reportTo ! OrderProcessed(UUID.randomUUID().toString, grossPrice)
       self ! PoisonPill
   }
 }
